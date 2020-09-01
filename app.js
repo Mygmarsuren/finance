@@ -1,25 +1,87 @@
-// дэлгэцтэй ажиллах контроллер
-var uiController = (function () {})();
+// Дэлгэцтэй ажиллах контроллер
+var uiController = (function () {
+  var DOMstrings = {
+    inputType: ".add__type",
+    inputDescription: ".add__description",
+    inputValue: ".add__value",
+    addBtn: ".add__btn",
+  };
 
-// санхүүтэй ажиллах контроллер
-var finalController = (function () {})();
+  return {
+    getInput: function () {
+      return {
+        type: document.querySelector(DOMstrings.inputType).value,
+        description: document.querySelector(DOMstrings.inputDescription).value,
+        value: document.querySelector(DOMstrings.inputValue).value,
+      };
+    },
 
-// Програмыг холбогч ажиллах контроллер
+    getDOMstrings: function () {
+      return DOMstrings;
+    },
+  };
+})();
 
-var appController = (function (uiController, finalController) {
-  function ctrlAddItem() {
-    //оруулах өгөгдлийг дэлгэцээс олж авна
-    //олж авсан өгөгдлийг санхүүгийн контролруу дамжуулж хадгална
-    //олж авсан өгөгдлүүдийг тохирох газар гаргана
-    //төсвийг тооцоолно
-    //эцсийн үлдэгдэл, тооцоог дэлгэцэнд гаргана
-  }
-  document.querySelector(".add__btn").addEventListener("click", function () {
-    ctrlAddItem();
-  });
-  document.addEventListener("keypress", function (event) {
-    if (event.keyCode == 13 || event.which == 13) {
+// Санхүүтэй ажиллах контроллер
+var financeController = (function () {
+  var Income = function (id, description, value) {
+    this.id = id;
+    this.description = description;
+    this.value = value;
+  };
+
+  var Expense = function (id, description, value) {
+    this.id = id;
+    this.description = description;
+    this.value = value;
+  };
+
+  var incomes = [];
+  var expenses = [];
+  var totalIncomes = 0;
+  var totalExpenses = 0;
+
+  var data = {
+    allItems: {
+      inc: [],
+      exp: [],
+    },
+
+    totals: {
+      inc: 0,
+      exp: 0,
+    },
+  };
+})();
+
+// Програмын холбогч контроллер
+var appController = (function (uiController, financeController) {
+  var ctrlAddItem = function () {
+    // 1. Оруулах өгөгдлийг дэлгэцээс олж авна.
+    console.log(uiController.getInput());
+    // 2. Олж авсан өгөгдлүүдээ санхүүгийн контроллерт дамжуулж тэнд хадгална.
+    // 3. Олж авсан өгөгдлүүдээ вэб дээрээ тохирох хэсэгт нь гаргана
+    // 4. Төсвийг тооцоолно
+    // 5. Эцсийн үлдэгдэл, тооцоог дэлгэцэнд гаргана.
+  };
+  function setupEventListeners() {
+    var DOM = uiController.getDOMstrings();
+
+    document.querySelector(DOM.addBtn).addEventListener("click", function () {
       ctrlAddItem();
-    }
-  });
-})(uiController, finalController);
+    });
+
+    document.addEventListener("keypress", function (event) {
+      if (event.keyCode === 13 || event.which === 13) {
+        ctrlAddItem();
+      }
+    });
+  }
+  return {
+    init: function () {
+      setupEventListeners();
+    },
+  };
+})(uiController, financeController);
+
+appController.init();
